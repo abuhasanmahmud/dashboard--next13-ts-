@@ -74,10 +74,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
                         {/* Product Name */}
                         <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>
-                            <label
-                              htmlfor="project-name"
-                              className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
-                            >
+                            <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
                               Product Name
                             </label>
                           </div>
@@ -99,10 +96,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
 
                         <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>
-                            <label
-                              htmlfor="project-Category"
-                              className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
-                            >
+                            <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
                               Product Category
                             </label>
                           </div>
@@ -122,10 +116,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
                         {/* product price */}
                         <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>
-                            <label
-                              htmlfor="project-Category"
-                              className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
-                            >
+                            <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
                               Price
                             </label>
                           </div>
@@ -145,10 +136,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
                         {/* Project description */}
                         <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>
-                            <label
-                              htmlfor="project-description"
-                              className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
-                            >
+                            <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
                               Description
                             </label>
                           </div>
@@ -169,10 +157,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
 
                         {/* product img */}
                         <div>
-                          <label
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            for="product-img"
-                          >
+                          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                             Upload product image
                           </label>
                           <input
