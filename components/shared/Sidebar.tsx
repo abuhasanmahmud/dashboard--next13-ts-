@@ -1,6 +1,7 @@
 "use client";
 import { Fragment, useState } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
+import { usePathname } from "next/navigation";
 
 import Link from "next/link";
 import {
@@ -25,9 +26,11 @@ function classNames(...classes: any) {
 const Sidebar = ({ component }: any) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   // console.log("icon");
+  const pathname = usePathname();
+
   return (
     <>
-      <div>
+      <div >
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
             <Transition.Child
@@ -135,9 +138,9 @@ const Sidebar = ({ component }: any) => {
         </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+        <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col ">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-gray-200 px-6 pb-4">
             <div className="flex h-16 shrink-0 items-center">
               <img
                 className="h-8 w-auto"
@@ -193,9 +196,9 @@ const Sidebar = ({ component }: any) => {
           </div>
         </div>
 
-        <div className="lg:pl-72">
-          <div className="sticky top-0 z-40 lg:mx-auto lg:max-w-7xl lg:px-8">
-            <div className="flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none">
+        <div className="lg:pl-72 ">
+        <div className="sticky top-0 z-40 lg:mx-auto lg:max-w-7xl ">
+            <div className="flex h-16 items-center gap-x-4 border-b border-gray-100 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none ">
               <button
                 type="button"
                 className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
@@ -206,7 +209,7 @@ const Sidebar = ({ component }: any) => {
               </button>
 
               {/* Separator */}
-              <div className="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true" />
+              <div className="h-6 w-px  lg:hidden" aria-hidden="true" />
 
               <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
                 <form className="relative flex flex-1" action="#" method="GET">
@@ -232,7 +235,7 @@ const Sidebar = ({ component }: any) => {
                   </button>
 
                   {/* Separator */}
-                  <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true" />
+                  <div className="hidden lg:block lg:h-6 lg:w-px " aria-hidden="true" />
 
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative">
@@ -262,7 +265,7 @@ const Sidebar = ({ component }: any) => {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                      <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md  py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                         {userNavigation.map((item: any) => (
                           <Menu.Item key={item.name}>
                             {({ active }: any) => (
@@ -285,8 +288,8 @@ const Sidebar = ({ component }: any) => {
               </div>
             </div>
           </div>
-          <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">
+          <main className="py-10 min-h-screen bg-gray-100">
+            <div className="px-4 sm:px-6 lg:px-8 ">
               {/* contan here */} {component}{" "}
             </div>
           </main>

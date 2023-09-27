@@ -1,9 +1,13 @@
-import React from "react";
+import { fetchAllProduct } from "@/lib/actions/product.action";
+import ProductTable from "../products/ProductTable";
+import SaleHistory from "../SaleHistory/SaleHistory";
 
-const DashboardHome = () => {
+const DashboardHome = async () => {
+  const allproduct = await fetchAllProduct();
   return (
     <>
-      <h2>DASHBOARD HOME</h2>
+      <SaleHistory />
+      <ProductTable products={allproduct} />
     </>
   );
 };
