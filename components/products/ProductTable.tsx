@@ -7,12 +7,18 @@ import ProductDrawer from "../drawer/productDrawer";
 import { deleteProduct, fetchAllProduct } from "@/lib/actions/product.action";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
+import { useMyContext } from "../context/myContext";
+import DeleteModal from "../modal/DeleteModal";
 
 const ProductTable = ({ products }: any) => {
   const [productDrawer, setProductDrawer] = useState(false);
   const [productDetails, setProductDetails] = useState({});
+  const [productId, setProductId] = useState("");
 
-  console.log("product", products);
+  // console.log("product", products);
+  const { isDeleteModal, setIsDeleteModal } = useMyContext();
+
+  // console.log("delete modal", isDeleteModal);
 
   const handelProductUpdata = (item: any) => {
     setProductDetails(item);
@@ -21,16 +27,6 @@ const ProductTable = ({ products }: any) => {
 
   const path = usePathname();
 
-  const deleteProductHandel = async (id: string) => {
-    const res = await deleteProduct({ id, path });
-    if (res._id) {
-      toast.success(`${res.name} delete successfully`);
-    } else {
-      toast.error("error");
-    }
-    console.log("res in delete", res);
-  };
-
   return (
     <>
       <ProductDrawer
@@ -38,6 +34,7 @@ const ProductTable = ({ products }: any) => {
         setProductDrawer={setProductDrawer}
         productDetails={productDetails}
       />
+      <DeleteModal productId={productId} />
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
@@ -120,7 +117,9 @@ const ProductTable = ({ products }: any) => {
                         </a>
 
                         <a
-                          onClick={() => deleteProductHandel(item._id.toString())}
+                          onClick={() => {
+                            setIsDeleteModal(true), setProductId(item._id.toString());
+                          }}
                           className="text-indigo-600 hover:text-indigo-900"
                         >
                           <RiDeleteBin5Fill className=" cursor-pointer " />
