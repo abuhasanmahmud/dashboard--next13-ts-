@@ -8,7 +8,8 @@ import { deleteProduct, fetchAllProduct } from "@/lib/actions/product.action";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 import { useMyContext } from "../context/myContext";
-import DeleteModal from "../modal/DeleteModal";
+// import DeleteModal from "../modal/DeleteModal";
+import DeleteModal2 from "../modal/DeleteModal2";
 
 const ProductTable = ({ products }: any) => {
   const [productDrawer, setProductDrawer] = useState(false);
@@ -34,7 +35,7 @@ const ProductTable = ({ products }: any) => {
         setProductDrawer={setProductDrawer}
         productDetails={productDetails}
       />
-      <DeleteModal productId={productId} />
+      <DeleteModal2 productId={productId} />
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
