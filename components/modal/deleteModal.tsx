@@ -21,7 +21,7 @@ const DeleteModal = ({ productId }: any) => {
       toast.success(`${res.name} delete successfully`);
       setIsDeleteModal(false);
     } else {
-      toast.error("error");
+      toast.error("errors");
     }
     console.log("res in delete", res, productId, path);
   };
