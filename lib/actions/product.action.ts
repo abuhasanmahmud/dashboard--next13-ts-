@@ -1,10 +1,10 @@
 "use server";
 
-import { connectToDb } from "@/utils/database";
+import { connectToDB } from "@/utils/database";
 import Product from "../model/product.model";
 
 export async function addProduct({ productData }: any) {
-  connectToDb();
+  connectToDB();
   try {
     const createProduct = await Product.create({ productData });
   } catch (error: any) {
