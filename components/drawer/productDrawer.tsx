@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect } from "react";
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
@@ -8,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Bars } from "react-loader-spinner";
 import { addProduct } from "@/lib/actions/product.action";
+import { usePathname } from "next/navigation";
 
 const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
   const {
@@ -19,9 +22,28 @@ const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
     formState: { errors },
   } = useForm();
 
+  const [submitting, setSubmitting] = useState(false);
+  const path = usePathname();
+
   const handelProduct = async (data: any) => {
-    console.log("data in product", data);
-    await addProduct({ data });
+    setSubmitting(true);
+    const productData = {
+      name: data.name,
+      category: data.category,
+      price: data.price,
+      des: data.des,
+    };
+
+    const res = await addProduct({ productData, path });
+    if (res._id) {
+      setSubmitting(false);
+      reset();
+      setProductDrawer(false);
+      toast.success(`${res.name} successfully added`);
+    } else {
+      setSubmitting(false);
+      alert("there is an error");
+    }
   };
 
   return (
@@ -171,7 +193,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
 
                     {/* Action buttons */}
                     <div className="flex-shrink-0 border-t border-gray-200 px-4 py-5 sm:px-6">
-                      {/* {submitting && (
+                      {submitting && (
                         <>
                           <Bars
                             height="80"
@@ -183,7 +205,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
                             visible={true}
                           />
                         </>
-                      )} */}
+                      )}
                       <div className="flex justify-end space-x-3">
                         <button
                           type="button"

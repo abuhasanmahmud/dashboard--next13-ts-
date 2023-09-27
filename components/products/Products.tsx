@@ -1,10 +1,13 @@
 import React from "react";
 import ProductTable from "./ProductTable";
+import { fetchAllProduct } from "@/lib/actions/product.action";
 
-const Products = () => {
+const Products = async () => {
+  const allproduct = await fetchAllProduct();
+  // console.log("allproudct", allproduct);
   return (
     <>
-      <ProductTable />
+      <ProductTable products={allproduct} />
     </>
   );
 };

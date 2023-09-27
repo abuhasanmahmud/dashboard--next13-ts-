@@ -4,9 +4,12 @@ import { RiDeleteBin5Fill } from "react-icons/ri";
 
 import { useEffect, useState } from "react";
 import ProductDrawer from "../drawer/productDrawer";
+import { fetchAllProduct } from "@/lib/actions/product.action";
 
 const ProductTable = ({ products }: any) => {
   const [productDrawer, setProductDrawer] = useState(false);
+  console.log("product", products);
+
   return (
     <>
       <ProductDrawer productDrawer={productDrawer} setProductDrawer={setProductDrawer} />
