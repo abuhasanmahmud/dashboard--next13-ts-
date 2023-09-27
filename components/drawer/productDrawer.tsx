@@ -62,7 +62,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
       des: data.des,
     };
     const res = await updateProduct({ product: productData, path, id: productDetails?._id });
-    console.log("click", res);
+    // console.log("click", res);
     if (res._id) {
       setSubmitting(false);
       setProductDrawer(false);
