@@ -8,7 +8,6 @@ import { deleteProduct, fetchAllProduct } from "@/lib/actions/product.action";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 import { useMyContext } from "../context/myContext";
-// import DeleteModal from "../modal/DeleteModal";
 import DeleteModal2 from "../modal/DeleteModal2";
 
 const ProductTable = ({ products }: any) => {
