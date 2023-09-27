@@ -4,15 +4,40 @@ import { RiDeleteBin5Fill } from "react-icons/ri";
 
 import { useEffect, useState } from "react";
 import ProductDrawer from "../drawer/productDrawer";
-import { fetchAllProduct } from "@/lib/actions/product.action";
+import { deleteProduct, fetchAllProduct } from "@/lib/actions/product.action";
+import { usePathname } from "next/navigation";
+import { toast } from "react-toastify";
 
 const ProductTable = ({ products }: any) => {
   const [productDrawer, setProductDrawer] = useState(false);
+  const [productDetails, setProductDetails] = useState({});
+
   console.log("product", products);
+
+  const handelProductUpdata = (item: any) => {
+    setProductDetails(item);
+    setProductDrawer(true);
+  };
+
+  const path = usePathname();
+
+  const deleteProductHandel = async (id: string) => {
+    const res = await deleteProduct({ id, path });
+    if (res._id) {
+      toast.success(`${res.name} delete successfully`);
+    } else {
+      toast.error("error");
+    }
+    console.log("res in delete", res);
+  };
 
   return (
     <>
-      <ProductDrawer productDrawer={productDrawer} setProductDrawer={setProductDrawer} />
+      <ProductDrawer
+        productDrawer={productDrawer}
+        setProductDrawer={setProductDrawer}
+        productDetails={productDetails}
+      />
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
@@ -20,7 +45,9 @@ const ProductTable = ({ products }: any) => {
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
             <button
-              onClick={(e) => setProductDrawer(true)}
+              onClick={(e) => {
+                setProductDrawer(true), setProductDetails({});
+              }}
               type="button"
               className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
@@ -85,11 +112,17 @@ const ProductTable = ({ products }: any) => {
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{item.price}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Publish</td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right flex justify-center  items-center gap-2 text-sm font-medium sm:pr-0">
-                        <a className="text-indigo-600 hover:text-indigo-900 cursor-pointer ">
+                        <a
+                          onClick={() => handelProductUpdata(item)}
+                          className="text-indigo-600 hover:text-indigo-900 cursor-pointer "
+                        >
                           Edit<span className="sr-only"> {item.name}</span>
                         </a>
 
-                        <a className="text-indigo-600 hover:text-indigo-900">
+                        <a
+                          onClick={() => deleteProductHandel(item._id.toString())}
+                          className="text-indigo-600 hover:text-indigo-900"
+                        >
                           <RiDeleteBin5Fill className=" cursor-pointer " />
                         </a>
                       </td>

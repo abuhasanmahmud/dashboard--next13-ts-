@@ -26,3 +26,14 @@ export async function fetchAllProduct() {
     throw new Error(`fetching product ${error.message}`);
   }
 }
+
+export async function deleteProduct({ id, path }: any) {
+  connectToDB();
+  try {
+    const deleteProduct = await Product.findByIdAndRemove(id);
+    revalidatePath(path);
+    return deleteProduct;
+  } catch (error: any) {
+    throw new Error(`delete product ${error.message}`);
+  }
+}

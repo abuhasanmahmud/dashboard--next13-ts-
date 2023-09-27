@@ -12,7 +12,7 @@ import { Bars } from "react-loader-spinner";
 import { addProduct } from "@/lib/actions/product.action";
 import { usePathname } from "next/navigation";
 
-const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
+const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any) => {
   const {
     register,
     handleSubmit,
@@ -22,10 +22,17 @@ const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    setValue("name", productDetails.name);
+    setValue("price", productDetails.price);
+    setValue("des", productDetails.des);
+    setValue("category", productDetails.category);
+  }, [productDetails]);
+
   const [submitting, setSubmitting] = useState(false);
   const path = usePathname();
 
-  const handelProduct = async (data: any) => {
+  const handelProductSubmit = async (data: any) => {
     setSubmitting(true);
     const productData = {
       name: data.name,
@@ -65,7 +72,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-2xl">
                   <form
-                    onSubmit={handleSubmit(handelProduct)}
+                    onSubmit={handleSubmit(handelProductSubmit)}
                     className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl"
                   >
                     <div className="flex-1">
@@ -74,7 +81,9 @@ const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
                         <div className="flex items-start justify-between space-x-3">
                           <div className="space-y-1">
                             <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                              Add Product
+                              {productDetails.name
+                                ? `Update product (${productDetails.name})`
+                                : "Add Product"}
                             </Dialog.Title>
                           </div>
                           <div className="flex h-7 items-center">
@@ -215,7 +224,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer }: any) => {
                           Cancel
                         </button>
                         <button
-                          //       disabled={submitting}
+                          disabled={submitting}
                           type="submit"
                           className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
