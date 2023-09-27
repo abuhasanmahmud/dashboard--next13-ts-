@@ -9,7 +9,7 @@ import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Bars } from "react-loader-spinner";
-import { addProduct } from "@/lib/actions/product.action";
+import { addProduct, updateProduct } from "@/lib/actions/product.action";
 import { usePathname } from "next/navigation";
 
 const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any) => {
@@ -32,7 +32,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
   const [submitting, setSubmitting] = useState(false);
   const path = usePathname();
 
-  const handelProductSubmit = async (data: any) => {
+  const handelProductAdd = async (data: any) => {
     setSubmitting(true);
     const productData = {
       name: data.name,
@@ -50,6 +50,25 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
     } else {
       setSubmitting(false);
       alert("there is an error");
+    }
+  };
+
+  const handelProductUpdate = async (data: any) => {
+    setSubmitting(true);
+    const productData = {
+      name: data.name,
+      category: data.category,
+      price: data.price,
+      des: data.des,
+    };
+    const res = await updateProduct({ product: productData, path, id: productDetails?._id });
+    console.log("click", res);
+    if (res._id) {
+      setSubmitting(false);
+      setProductDrawer(false);
+      toast.success(`${res?.name} update successfully`);
+    } else {
+      setSubmitting(false);
     }
   };
 
@@ -72,7 +91,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-2xl">
                   <form
-                    onSubmit={handleSubmit(handelProductSubmit)}
+                    onSubmit={handleSubmit(!productDetails._id ? handelProductAdd : handelProductUpdate)}
                     className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl"
                   >
                     <div className="flex-1">
@@ -228,8 +247,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
                           type="submit"
                           className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
-                          {/* {productDetails?._id ? <span>Update</span> : <span>Create</span>} */}
-                          create
+                          {productDetails?._id ? <span>Update</span> : <span>Create</span>}
                         </button>
                       </div>
                     </div>

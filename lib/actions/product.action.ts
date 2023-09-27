@@ -37,3 +37,27 @@ export async function deleteProduct({ id, path }: any) {
     throw new Error(`delete product ${error.message}`);
   }
 }
+
+export async function updateProduct({ product, id, path }: any) {
+  try {
+    await connectToDB();
+
+    // Find the existing prompt by ID
+    const existingPrduct = await Product.findById(id);
+
+    if (!existingPrduct) {
+      return new Response("Product not found", { status: 404 });
+    }
+
+    existingPrduct.name = product.name;
+    existingPrduct.price = product.price;
+    existingPrduct.category = product.category;
+    existingPrduct.des = product.des;
+
+    await existingPrduct.save();
+    revalidatePath(path);
+    return existingPrduct;
+  } catch (error: any) {
+    throw new Error(`update product ${error.message}`);
+  }
+}
