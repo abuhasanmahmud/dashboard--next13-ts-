@@ -4,7 +4,7 @@ import { fetchAllProduct } from "@/lib/actions/product.action";
 
 const Products = async () => {
   const allproduct = await fetchAllProduct();
-  console.log("allproudct", allproduct);
+  // console.log("allproudct", allproduct);
   return (
     <>
       <ProductTable products={allproduct} />
