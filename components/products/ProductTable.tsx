@@ -15,7 +15,7 @@ const ProductTable = ({ products }: any) => {
   const [productDetails, setProductDetails] = useState({});
   const [productId, setProductId] = useState("");
 
-  // console.log("product", products);
+  console.log("product", products);
   const { isDeleteModal, setIsDeleteModal } = useMyContext();
 
   // console.log("delete modal", isDeleteModal);
@@ -26,7 +26,7 @@ const ProductTable = ({ products }: any) => {
   };
 
   const path = usePathname();
-  console.log("path", path);
+  // console.log("path", path);
 
   return (
     <>
