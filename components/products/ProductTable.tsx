@@ -15,7 +15,7 @@ const ProductTable = ({ products }: any) => {
   const [productDetails, setProductDetails] = useState({});
   const [productId, setProductId] = useState("");
 
-  console.log("product", products);
+  // console.log("product", products);
   const { isDeleteModal, setIsDeleteModal } = useMyContext();
 
   // console.log("delete modal", isDeleteModal);
@@ -26,6 +26,7 @@ const ProductTable = ({ products }: any) => {
   };
 
   const path = usePathname();
+  console.log("path", path);
 
   return (
     <>
@@ -35,24 +36,31 @@ const ProductTable = ({ products }: any) => {
         productDetails={productDetails}
       />
       <DeleteModal2 productId={productId} />
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6 lg:px-8 ">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="text-base font-semibold leading-6 text-gray-900">Products</h1>
+            <h1 className="text-base font-bold leading-6 text-gray-900">Products</h1>
           </div>
-          <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-            <button
-              onClick={(e) => {
-                setProductDrawer(true), setProductDetails({});
-              }}
-              type="button"
-              className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Add Product
-            </button>
-          </div>
+          {path === "/products" ? (
+            <>
+              {" "}
+              <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                <button
+                  onClick={(e) => {
+                    setProductDrawer(true), setProductDetails({});
+                  }}
+                  type="button"
+                  className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Add Product
+                </button>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
         </div>
-        <div className="mt-8 flow-root">
+        <div className="mt-8 flow-root ">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
               <table className="min-w-full divide-y divide-gray-300">
@@ -88,12 +96,25 @@ const ProductTable = ({ products }: any) => {
                     >
                       Status
                     </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Action
-                    </th>
+                    {path === "/products" ? (
+                      <>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Action
+                        </th>
+                      </>
+                    ) : (
+                      <>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Quantity
+                        </th>
+                      </>
+                    )}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -108,23 +129,33 @@ const ProductTable = ({ products }: any) => {
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{item.price}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Publish</td>
-                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right flex justify-center  items-center gap-2 text-sm font-medium sm:pr-0">
-                        <a
-                          onClick={() => handelProductUpdata(item)}
-                          className="text-indigo-600 hover:text-indigo-900 cursor-pointer "
-                        >
-                          Edit<span className="sr-only"> {item.name}</span>
-                        </a>
+                      {path === "/products" ? (
+                        <>
+                          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right flex justify-center  items-center gap-2 text-sm font-medium sm:pr-0">
+                            <a
+                              onClick={() => handelProductUpdata(item)}
+                              className="text-indigo-600 hover:text-indigo-900 cursor-pointer "
+                            >
+                              Edit<span className="sr-only"> {item.name}</span>
+                            </a>
 
-                        <a
-                          onClick={() => {
-                            setIsDeleteModal(true), setProductId(item._id.toString());
-                          }}
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          <RiDeleteBin5Fill className=" cursor-pointer " />
-                        </a>
-                      </td>
+                            <a
+                              onClick={() => {
+                                setIsDeleteModal(true), setProductId(item._id.toString());
+                              }}
+                              className="text-indigo-600 hover:text-indigo-900"
+                            >
+                              <RiDeleteBin5Fill className=" cursor-pointer " />
+                            </a>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 ">
+                            {item.quantity} 00
+                          </td>
+                        </>
+                      )}
                     </tr>
                   ))}
                 </tbody>
