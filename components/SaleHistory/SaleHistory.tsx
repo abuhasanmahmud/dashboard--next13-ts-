@@ -53,7 +53,7 @@ const SaleHistory = () => {
         },
         title: {
           display: true,
-          text: "Daily Revenue",
+          text: "Mountly Revenue",
         },
       },
       maintainAspectRatio: false,

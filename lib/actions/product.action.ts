@@ -21,6 +21,7 @@ export async function fetchAllProduct() {
   connectToDB();
   try {
     const allProducts = await Product.find();
+    console.log("allProducts", allProducts);
     return allProducts;
   } catch (error: any) {
     throw new Error(`fetching product ${error.message}`);
