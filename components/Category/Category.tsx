@@ -7,7 +7,6 @@ const Category = async () => {
   // console.log("all Category", allCategory);
   return (
     <div>
-      <p>Category page</p>
       <CategoryTable categorys={allCategory} />
     </div>
   );
