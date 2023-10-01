@@ -100,8 +100,8 @@ const CategoryDrawer = ({ isOpenCategoryDrawer, setIsOpenCategoryDrawer, categor
                           <div className="space-y-1">
                             <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
                               {categoryDetails.title
-                                ? `Update product (${categoryDetails.title})`
-                                : "Add Product"}
+                                ? `Update Category (${categoryDetails.title})`
+                                : "Add Category"}
                             </Dialog.Title>
                           </div>
                           <div className="flex h-7 items-center">
@@ -177,14 +177,14 @@ const CategoryDrawer = ({ isOpenCategoryDrawer, setIsOpenCategoryDrawer, categor
                             />
                             {errors.des?.type === "required" && (
                               <p className="text-red-400 font-bold mt-1">
-                                Product description is required
+                                Category description is required
                               </p>
                             )}
                           </div>
                         </div>
 
                         {/* product img */}
-                        <div className="mx-6">
+                        {/* <div className="mx-6">
                           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                             Upload category icon
                           </label>
@@ -193,7 +193,7 @@ const CategoryDrawer = ({ isOpenCategoryDrawer, setIsOpenCategoryDrawer, categor
                             id="product-img"
                             type="file"
                           />
-                        </div>
+                        </div> */}
                       </div>
                     </div>
 

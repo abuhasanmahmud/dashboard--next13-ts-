@@ -9,10 +9,10 @@ import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Bars } from "react-loader-spinner";
-import { addProduct, updateProduct } from "@/lib/actions/product.action";
+import { addStaff, updateStaff } from "@/lib/actions/staff.action";
 import { usePathname } from "next/navigation";
 
-const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any) => {
+const StaffDrawer = ({ isOpenStaffDrawer, setIsOpenStaffDrawer, staffDetails }: any) => {
   const {
     register,
     handleSubmit,
@@ -23,58 +23,62 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
   } = useForm();
 
   useEffect(() => {
-    setValue("name", productDetails.name);
-    setValue("price", productDetails.price);
-    setValue("des", productDetails.des);
-    setValue("category", productDetails.category);
-  }, [productDetails]);
+    setValue("name", staffDetails.name);
+    setValue("email", staffDetails.email);
+    setValue("contact", staffDetails.contact);
+    setValue("role", staffDetails.role);
+  }, [staffDetails]);
 
   const [submitting, setSubmitting] = useState(false);
   const path = usePathname();
 
-  const handelProductAdd = async (data: any) => {
+  const handelStaffAdd = async (data: any) => {
     setSubmitting(true);
-    const productData = {
+    const staffData = {
       name: data.name,
-      category: data.category,
-      price: data.price,
-      des: data.des,
+      email: data.email,
+      contact: data.contact,
+      status: data.status,
+      role: data.role,
+      password: data.password,
     };
 
-    const res = await addProduct({ productData, path });
+    const res = await addStaff({ staffData, path });
     if (res._id) {
       setSubmitting(false);
       reset();
-      setProductDrawer(false);
-      toast.success(`${res.name} successfully added`);
+      setIsOpenStaffDrawer(false);
+      toast.success(`${res.title} successfully added`);
     } else {
       setSubmitting(false);
       alert("there is an error");
     }
   };
 
-  const handelProductUpdate = async (data: any) => {
+  const handelStaffUpdate = async (data: any) => {
     setSubmitting(true);
-    const productData = {
+    const staffData = {
       name: data.name,
-      category: data.category,
-      price: data.price,
-      des: data.des,
+      email: data.email,
+      contact: data.contact,
+      status: data.status,
+      role: data.role,
+      password: data.password,
     };
-    const res = await updateProduct({ product: productData, path, id: productDetails?._id });
+    const res = await updateStaff({ staff: staffData, path, id: staffDetails?._id });
     // console.log("click", res);
     if (res._id) {
       setSubmitting(false);
-      setProductDrawer(false);
-      toast.success(`${res?.name} update successfully`);
+      setIsOpenStaffDrawer(false);
+      toast.success(`${res?.title} update successfully`);
     } else {
       setSubmitting(false);
     }
   };
 
   return (
-    <Transition.Root show={productDrawer} as={Fragment}>
-      <Dialog as="div" className="relative z-[100]" onClose={setProductDrawer}>
+    <Transition.Root show={isOpenStaffDrawer} as={Fragment}>
+      <Dialog as="div" className="relative z-[100]" onClose={setIsOpenStaffDrawer}>
         <div className="fixed inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">
@@ -91,7 +95,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-2xl">
                   <form
-                    onSubmit={handleSubmit(!productDetails._id ? handelProductAdd : handelProductUpdate)}
+                    onSubmit={handleSubmit(!staffDetails?._id ? handelStaffAdd : handelStaffUpdate)}
                     className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl"
                   >
                     <div className="flex-1">
@@ -100,16 +104,14 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
                         <div className="flex items-start justify-between space-x-3">
                           <div className="space-y-1">
                             <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                              {productDetails.name
-                                ? `Update product (${productDetails.name})`
-                                : "Add Product"}
+                              {staffDetails?.name ? `Update Staff (${staffDetails?.name})` : "Add Staff"}
                             </Dialog.Title>
                           </div>
                           <div className="flex h-7 items-center">
                             <button
                               type="button"
                               className="relative text-gray-400 hover:text-gray-500"
-                              onClick={() => setProductDrawer(false)}
+                              onClick={() => setIsOpenStaffDrawer(false)}
                             >
                               <span className="absolute -inset-2.5" />
                               <span className="sr-only">Close panel</span>
@@ -119,72 +121,116 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
                         </div>
                       </div>
 
-                      {/* Divider container */}
-                      <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
-                        {/* Product Name */}
+                      <div className="space-y-6 py-6 sm:space-y-0  sm:py-0">
+                        {/*  Name */}
                         <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>
                             <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                              Product Name
+                              Staff Name
                             </label>
                           </div>
                           <div className="sm:col-span-2">
                             <input
                               type="text"
                               // setValue={}
-                              // defaultValue={productDetails ? productDetails?.name : ""}
+                              // defaultValue={categoryDetails ? categoryDetails?.title : ""}
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
                               {...register("name", { required: true })}
                             />
                             {errors.name?.type === "required" && (
-                              <p className="text-red-400 font-bold mt-1">Product name is required</p>
+                              <p className="text-red-400 font-bold mt-1">staff is required</p>
                             )}
                           </div>
                         </div>
-
-                        {/* Project Category */}
-
+                        {/* email */}
                         <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>
                             <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                              Product Category
+                              Staff Email
+                            </label>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <input
+                              type="email"
+                              // setValue={}
+                              // defaultValue={categoryDetails ? categoryDetails?.title : ""}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
+                              {...register("email", { required: true })}
+                            />
+                            {errors.email?.type === "required" && (
+                              <p className="text-red-400 font-bold mt-1">email is required</p>
+                            )}
+                          </div>
+                        </div>
+                        {staffDetails?._id ? (
+                          <></>
+                        ) : (
+                          <>
+                            (
+                            <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                              <div>
+                                <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                  Staff Password
+                                </label>
+                              </div>
+                              <div className="sm:col-span-2">
+                                <input
+                                  type="password"
+                                  // setValue={}
+                                  // defaultValue={categoryDetails ? categoryDetails?.title : ""}
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
+                                  {...register("password", { required: true })}
+                                />
+                                {errors.password?.type === "required" && (
+                                  <p className="text-red-400 font-bold mt-1">
+                                    staff password is required
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            )
+                          </>
+                        )}
+                        <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                          <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                              Staff Contact
+                            </label>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <input
+                              type="Number"
+                              // setValue={}
+                              // defaultValue={categoryDetails ? categoryDetails?.title : ""}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
+                              {...register("contact", { required: true })}
+                            />
+                            {errors.contact?.type === "required" && (
+                              <p className="text-red-400 font-bold mt-1">staff contact is required</p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                          <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                              Staf role
                             </label>
                           </div>
                           <div className="sm:col-span-2">
                             <input
                               type="text"
-                              // defaultValue={productDetails?.category}
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              {...register("category", { required: true })}
+                              // setValue={}
+                              // defaultValue={categoryDetails ? categoryDetails?.title : ""}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
+                              {...register("role", { required: true })}
                             />
-                            {errors.category?.type === "required" && (
-                              <p className="text-red-400 font-bold mt-1">Product category is required</p>
+                            {errors.role?.type === "required" && (
+                              <p className="text-red-400 font-bold mt-1">Staff role is required</p>
                             )}
                           </div>
                         </div>
-
-                        {/* product price */}
-                        <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                          <div>
-                            <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                              Price
-                            </label>
-                          </div>
-                          <div className="sm:col-span-2">
-                            <input
-                              type="number"
-                              // defaultValue={productDetails?.price}
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              {...register("price", { required: true })}
-                            />
-                            {errors.price?.type === "required" && (
-                              <p className="text-red-400 font-bold mt-1">Product price is required</p>
-                            )}
-                          </div>
-                        </div>
-
                         {/* Project description */}
-                        <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                        {/* <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>
                             <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
                               Description
@@ -192,23 +238,22 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
                           </div>
                           <div className="sm:col-span-2">
                             <textarea
-                              // defaultValue={productDetails?.des}
+                              // defaultValue={categoryDetails?.des}
                               rows={3}
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               {...register("des", { required: true })}
                             />
                             {errors.des?.type === "required" && (
                               <p className="text-red-400 font-bold mt-1">
-                                Product description is required
+                                Category description is required
                               </p>
                             )}
                           </div>
-                        </div>
-
+                        </div> */}
                         {/* product img */}
-                        {/* <div>
+                        {/* <div className="mx-6">
                           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Upload product image
+                            Upload category icon
                           </label>
                           <input
                             className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -238,7 +283,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
                         <button
                           type="button"
                           className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                          onClick={() => setProductDrawer(false)}
+                          onClick={() => setIsOpenStaffDrawer(false)}
                         >
                           Cancel
                         </button>
@@ -247,7 +292,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
                           type="submit"
                           className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
-                          {productDetails?._id ? <span>Update</span> : <span>Create</span>}
+                          {staffDetails?._id ? <span>Update</span> : <span>Create</span>}
                         </button>
                       </div>
                     </div>
@@ -262,4 +307,4 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
   );
 };
 
-export default ProductDrawer;
+export default StaffDrawer;

@@ -9,10 +9,11 @@ import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Bars } from "react-loader-spinner";
-import { addProduct, updateProduct } from "@/lib/actions/product.action";
+import { addCoupon, updateCoupon } from "@/lib/actions/coupon.action";
 import { usePathname } from "next/navigation";
 
-const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any) => {
+const CouponDrawer = ({ isOpenCouponDrawer, setIsOpenCouponDrawer, couponDetails }: any) => {
+  // console.log("couponDetails", couponDetails);
   const {
     register,
     handleSubmit,
@@ -23,58 +24,59 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
   } = useForm();
 
   useEffect(() => {
-    setValue("name", productDetails.name);
-    setValue("price", productDetails.price);
-    setValue("des", productDetails.des);
-    setValue("category", productDetails.category);
-  }, [productDetails]);
+    setValue("title", couponDetails.title);
+    setValue("couponCode", couponDetails.couponCode);
+    setValue("endTime", couponDetails.endTime);
+    setValue("status", couponDetails.status);
+    setValue("discountPercentage", couponDetails.discountPercentage);
+  }, [couponDetails]);
 
   const [submitting, setSubmitting] = useState(false);
   const path = usePathname();
 
-  const handelProductAdd = async (data: any) => {
+  const handelCouponAdd = async (data: any) => {
     setSubmitting(true);
-    const productData = {
-      name: data.name,
-      category: data.category,
-      price: data.price,
-      des: data.des,
+    const couponData = {
+      title: data.title,
+      couponCode: data.couponCode,
+      endTime: data.endTime,
+      discountPercentage: data.discountPercentage,
     };
 
-    const res = await addProduct({ productData, path });
+    const res = await addCoupon({ couponData, path });
     if (res._id) {
       setSubmitting(false);
       reset();
-      setProductDrawer(false);
-      toast.success(`${res.name} successfully added`);
+      setIsOpenCouponDrawer(false);
+      toast.success(`${res.title} successfully added`);
     } else {
       setSubmitting(false);
       alert("there is an error");
     }
   };
 
-  const handelProductUpdate = async (data: any) => {
+  const handelCouponUpdate = async (data: any) => {
     setSubmitting(true);
-    const productData = {
-      name: data.name,
-      category: data.category,
-      price: data.price,
-      des: data.des,
+    const couponData = {
+      title: data.title,
+      couponCode: data.couponCode,
+      endTime: data.endTime,
+      discountPercentage: data.discountPercentage,
     };
-    const res = await updateProduct({ product: productData, path, id: productDetails?._id });
+    const res = await updateCoupon({ coupon: couponData, path, id: couponDetails?._id });
     // console.log("click", res);
     if (res._id) {
       setSubmitting(false);
-      setProductDrawer(false);
-      toast.success(`${res?.name} update successfully`);
+      setIsOpenCouponDrawer(false);
+      toast.success(`${res?.title} update successfully`);
     } else {
       setSubmitting(false);
     }
   };
 
   return (
-    <Transition.Root show={productDrawer} as={Fragment}>
-      <Dialog as="div" className="relative z-[100]" onClose={setProductDrawer}>
+    <Transition.Root show={isOpenCouponDrawer} as={Fragment}>
+      <Dialog as="div" className="relative z-[100]" onClose={setIsOpenCouponDrawer}>
         <div className="fixed inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">
@@ -91,7 +93,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-2xl">
                   <form
-                    onSubmit={handleSubmit(!productDetails._id ? handelProductAdd : handelProductUpdate)}
+                    onSubmit={handleSubmit(!couponDetails._id ? handelCouponAdd : handelCouponUpdate)}
                     className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl"
                   >
                     <div className="flex-1">
@@ -100,16 +102,16 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
                         <div className="flex items-start justify-between space-x-3">
                           <div className="space-y-1">
                             <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                              {productDetails.name
-                                ? `Update product (${productDetails.name})`
-                                : "Add Product"}
+                              {couponDetails.title
+                                ? `Update Coupon (${couponDetails.title})`
+                                : "Add Coupon"}
                             </Dialog.Title>
                           </div>
                           <div className="flex h-7 items-center">
                             <button
                               type="button"
                               className="relative text-gray-400 hover:text-gray-500"
-                              onClick={() => setProductDrawer(false)}
+                              onClick={() => setIsOpenCouponDrawer(false)}
                             >
                               <span className="absolute -inset-2.5" />
                               <span className="sr-only">Close panel</span>
@@ -120,71 +122,88 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
                       </div>
 
                       {/* Divider container */}
-                      <div className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                      <div className="space-y-6 py-6 sm:space-y-0  sm:py-0">
                         {/* Product Name */}
                         <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>
                             <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                              Product Name
+                              Coupon Name
                             </label>
                           </div>
                           <div className="sm:col-span-2">
                             <input
                               type="text"
                               // setValue={}
-                              // defaultValue={productDetails ? productDetails?.name : ""}
+                              // defaultValue={couponDetails ? couponDetails?.title : ""}
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
-                              {...register("name", { required: true })}
+                              {...register("title", { required: true })}
                             />
-                            {errors.name?.type === "required" && (
-                              <p className="text-red-400 font-bold mt-1">Product name is required</p>
+                            {errors.title?.type === "required" && (
+                              <p className="text-red-400 font-bold mt-1">Coupon title is required</p>
                             )}
                           </div>
                         </div>
 
-                        {/* Project Category */}
-
                         <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>
                             <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                              Product Category
+                              Coupon Code
                             </label>
                           </div>
                           <div className="sm:col-span-2">
                             <input
                               type="text"
-                              // defaultValue={productDetails?.category}
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              {...register("category", { required: true })}
+                              // setValue={}
+                              // defaultValue={couponDetails ? couponDetails?.title : ""}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
+                              {...register("couponCode", { required: true })}
                             />
-                            {errors.category?.type === "required" && (
-                              <p className="text-red-400 font-bold mt-1">Product category is required</p>
+                            {errors.couponCode?.type === "required" && (
+                              <p className="text-red-400 font-bold mt-1">Coupon code is required</p>
                             )}
                           </div>
                         </div>
-
-                        {/* product price */}
                         <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>
                             <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                              Price
+                              Coupon Discount
                             </label>
                           </div>
                           <div className="sm:col-span-2">
                             <input
-                              type="number"
-                              // defaultValue={productDetails?.price}
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              {...register("price", { required: true })}
+                              type="Number"
+                              // setValue={}
+                              // defaultValue={couponDetails ? couponDetails?.title : ""}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
+                              {...register("discountPercentage", { required: true })}
                             />
-                            {errors.price?.type === "required" && (
-                              <p className="text-red-400 font-bold mt-1">Product price is required</p>
+                            {errors.discountPercentage?.type === "required" && (
+                              <p className="text-red-400 font-bold mt-1">Coupon discount is required</p>
                             )}
                           </div>
                         </div>
+                        {/* <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                          <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                              Coupon status
+                            </label>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <input
+                              type="text"
+                              // setValue={}
+                              // defaultValue={couponDetails ? couponDetails?.title : ""}
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
+                              {...register("status", { required: true })}
+                            />
+                            {errors.type?.type === "required" && (
+                              <p className="text-red-400 font-bold mt-1">Coupon Status is required</p>
+                            )}
+                          </div>
+                        </div> */}
 
                         {/* Project description */}
-                        <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                        {/* <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                           <div>
                             <label className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
                               Description
@@ -192,7 +211,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
                           </div>
                           <div className="sm:col-span-2">
                             <textarea
-                              // defaultValue={productDetails?.des}
+                              // defaultValue={couponDetails?.des}
                               rows={3}
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               {...register("des", { required: true })}
@@ -203,12 +222,12 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
                               </p>
                             )}
                           </div>
-                        </div>
+                        </div> */}
 
-                        {/* product img */}
-                        {/* <div>
+                        {/* product img
+                        <div className="mx-6">
                           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Upload product image
+                            Upload category icon
                           </label>
                           <input
                             className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -238,7 +257,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
                         <button
                           type="button"
                           className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                          onClick={() => setProductDrawer(false)}
+                          onClick={() => setIsOpenCouponDrawer(false)}
                         >
                           Cancel
                         </button>
@@ -247,7 +266,7 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
                           type="submit"
                           className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
-                          {productDetails?._id ? <span>Update</span> : <span>Create</span>}
+                          {couponDetails?._id ? <span>Update</span> : <span>Create</span>}
                         </button>
                       </div>
                     </div>
@@ -262,4 +281,4 @@ const ProductDrawer = ({ productDrawer, setProductDrawer, productDetails }: any)
   );
 };
 
-export default ProductDrawer;
+export default CouponDrawer;

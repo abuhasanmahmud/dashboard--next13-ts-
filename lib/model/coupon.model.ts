@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import { Schema, model, models } from "mongoose";
 
-const couponSchema = new mongoose.Schema(
+const couponSchema = new Schema(
   {
     title: {
       type: String,
@@ -8,16 +8,21 @@ const couponSchema = new mongoose.Schema(
     },
     logo: {
       type: String,
-      required: true,
+      required: false,
     },
 
     couponCode: {
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      enum: ["active", "deactive"],
+      default: "active",
+    },
     endTime: {
       type: Date,
-      required: true,
+      required: false,
     },
     discountPercentage: {
       type: Number,
@@ -28,6 +33,6 @@ const couponSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+const Coupon = models?.Coupon || model("Coupon", couponSchema);
 
-const Coupon = mongoose.models.Coupon || mongoose.model("Coupon", couponSchema);
-module.exports = Coupon;
+export default Coupon;

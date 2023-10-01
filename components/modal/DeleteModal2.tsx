@@ -9,13 +9,14 @@ import { useMyContext } from "../context/myContext";
 import { deleteCategory } from "@/lib/actions/category.action";
 import { deleteProduct } from "@/lib/actions/product.action";
 import { usePathname } from "next/navigation";
-import Product from "@/lib/model/product.model";
+import { deleteStaff } from "@/lib/actions/staff.action";
+import { deleteCoupon } from "@/lib/actions/coupon.action";
 
-const DeleteModal2 = ({ productId, categoryId }: any) => {
+const DeleteModal2 = ({ productId, categoryId, staffId, couponId }: any) => {
   const { isDeleteModal, setIsDeleteModal } = useMyContext();
   const cancelButtonRef = useRef(null);
   const path = usePathname();
-  console.log("p=", productId, "c=", categoryId);
+  // console.log("p=", productId, "c=", categoryId);
 
   const deleteCategoryHandel = async () => {};
 
@@ -23,7 +24,7 @@ const DeleteModal2 = ({ productId, categoryId }: any) => {
     //delete categroy
     if (categoryId !== undefined) {
       const res = await deleteCategory({ id: categoryId, path });
-      console.log("res in delete modal", res);
+      // console.log("res in delete modal", res);
       if (res?._id) {
         toast.success(`${res.title} delete successfully`);
         setIsDeleteModal(false);
@@ -38,6 +39,30 @@ const DeleteModal2 = ({ productId, categoryId }: any) => {
       console.log("res in delete modal", res);
       if (res?._id) {
         toast.success(`${res.name} delete successfully`);
+        setIsDeleteModal(false);
+      } else {
+        toast.error("errors");
+      }
+    }
+
+    //delete staff
+    else if (staffId !== undefined) {
+      const res = await deleteStaff({ id: staffId, path });
+      console.log("res in delete modal", res);
+      if (res?._id) {
+        toast.success(`${res.name} delete successfully`);
+        setIsDeleteModal(false);
+      } else {
+        toast.error("errors");
+      }
+    }
+
+    //delete coupon
+    else if (couponId !== undefined) {
+      const res = await deleteCoupon({ id: couponId, path });
+      console.log("res in delete modal", res);
+      if (res?._id) {
+        toast.success(`${res.title} delete successfully`);
         setIsDeleteModal(false);
       } else {
         toast.error("errors");
