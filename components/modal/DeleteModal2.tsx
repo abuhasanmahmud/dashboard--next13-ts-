@@ -6,24 +6,43 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import { toast } from "react-toastify";
 import { useMyContext } from "../context/myContext";
+import { deleteCategory } from "@/lib/actions/category.action";
 import { deleteProduct } from "@/lib/actions/product.action";
 import { usePathname } from "next/navigation";
+import Product from "@/lib/model/product.model";
 
-const DeleteModal2 = ({ productId }: any) => {
+const DeleteModal2 = ({ productId, categoryId }: any) => {
   const { isDeleteModal, setIsDeleteModal } = useMyContext();
   const cancelButtonRef = useRef(null);
   const path = usePathname();
+  console.log("p=", productId, "c=", categoryId);
 
-  const deleteProductHandel = async () => {
-    const res = await deleteProduct({ id: productId, path });
-    console.log("res in delete modal", res);
-    if (res?._id) {
-      toast.success(`${res.name} delete successfully`);
-      setIsDeleteModal(false);
-    } else {
-      toast.error("errors");
+  const deleteCategoryHandel = async () => {};
+
+  const handelDelete = async () => {
+    //delete categroy
+    if (categoryId !== undefined) {
+      const res = await deleteCategory({ id: categoryId, path });
+      console.log("res in delete modal", res);
+      if (res?._id) {
+        toast.success(`${res.title} delete successfully`);
+        setIsDeleteModal(false);
+      } else {
+        toast.error("errors");
+      }
     }
-    console.log("res in delete", res, productId, path);
+
+    //delete product
+    else if (productId !== undefined) {
+      const res = await deleteProduct({ id: productId, path });
+      console.log("res in delete modal", res);
+      if (res?._id) {
+        toast.success(`${res.name} delete successfully`);
+        setIsDeleteModal(false);
+      } else {
+        toast.error("errors");
+      }
+    }
   };
 
   return (
@@ -78,7 +97,7 @@ const DeleteModal2 = ({ productId }: any) => {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                    onClick={() => deleteProductHandel()}
+                    onClick={() => handelDelete()}
                   >
                     Delete
                   </button>
