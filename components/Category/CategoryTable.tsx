@@ -15,7 +15,7 @@ const CategoryTable = ({ categorys }: any) => {
   const [categoryDetails, setCategoryDetails] = useState({});
   const [categoryId, setCategoryId] = useState("");
 
-  // console.log("product", products);
+  console.log("categoryDetails", categoryDetails);
   const { isDeleteModal, setIsDeleteModal } = useMyContext();
 
   // console.log("delete modal", isDeleteModal);
