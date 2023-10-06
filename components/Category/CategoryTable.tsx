@@ -18,7 +18,7 @@ const CategoryTable = ({ categorys }: any) => {
   console.log("categoryDetails", categoryDetails);
   const { isDeleteModal, setIsDeleteModal } = useMyContext();
 
-  console.log("delete modal", isDeleteModal);
+  // console.log("delete modal", isDeleteModal);
 
   const handelCategoryUpdate = (item: any) => {
     setCategoryDetails(item);
